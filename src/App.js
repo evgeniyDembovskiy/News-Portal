@@ -1,32 +1,30 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/App.css"
 import PostList from './components/PostList';
 import PostForm from "./components/PostForm";
 import PostFilter from './components/PostFilter';
 import MyModal from './components/UI/modal/MyModal';
 import MyButton from './components/UI/button/MyButton';
+import { usePosts } from "./hooks/usePosts";
+
+import PostService from "./API/PostService";
+import Loader from "./components/UI/loader/Loader";
+import { useFetching } from "./hooks/useFetching";
 
 
 function App() {
-    const [posts, setPosts] = useState([
-        {id: 1, title: "D news", body: "A Descr"},
-        {id: 2, title: "C news", body: "F Descr"},
-        {id: 3, title: "B news", body: "G Descr"},
-    ]);
-
+    const [posts, setPosts] = useState([]);
     const [filter, setFilter] = useState({sort: "", query: ""});
     const [modal, setModal] = useState(false);
+    const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+    const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+        const posts = await PostService.getAll();
+        setPosts(posts);
+    })
 
-    const sortedPosts = useMemo(() => {
-        if (filter.sort) {
-            return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
-        }
-        return posts;
-    }, [filter.sort, posts])
-
-    const sortedAndSearchedPosts = useMemo(() => {
-        return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
-    }, [filter.query, sortedPosts])
+    useEffect(() => {
+        fetchPosts();
+    }, [])
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost]);
@@ -50,7 +48,14 @@ function App() {
                 filter={filter}
                 setFilter={setFilter}
             />
-            <PostList remove={removePost} posts={sortedAndSearchedPosts} title="Список новостей"/>
+            {postError && 
+                <h1>Произошла ошибка ${postError}</h1>
+            }
+            {isPostsLoading
+                ?   <div style={{display: "flex", justifyContent: "center", marginTop: 50}}><Loader/> </div> 
+                :   <PostList remove={removePost} posts={sortedAndSearchedPosts} title="Список новостей"/>
+            }
+
         </div>
     );
 }
