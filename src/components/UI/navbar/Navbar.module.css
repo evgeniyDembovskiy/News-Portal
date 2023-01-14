@@ -1,0 +1,27 @@
+.navbar {
+    height: 50px;
+    width: 50vw;
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: teal;
+}
+
+.navbar__links {
+    /* margin-left: auto; */
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar__links_item, .navbar__links_item:visited {
+    font-size: 20px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar__links_item:hover {
+    color: #fff;
+    text-decoration: underline;
+}
