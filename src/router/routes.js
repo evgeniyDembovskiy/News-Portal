@@ -4,8 +4,9 @@ import Error from "../pages/Error";
 import Posts from "../pages/Posts";
 import PostIdPage from '../pages/PostIdPage';
 import Navbar from '../components/UI/navbar/Navbar';
+import Login from "../pages/Login";
 
-export const getRoutes = () => {
+export const getPrivateRoutes = () => {
     const router = createBrowserRouter([
         {
             path: "/",
@@ -29,6 +30,22 @@ export const getRoutes = () => {
         {
             path: "/about",
             element: <About/>,
+        },
+      ]);
+    return router;
+}
+
+export const getPublicRoutes = () => {
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Login/>,
+            errorElement: <Login/>,
+        },
+        {
+            path: "/login",
+            element: <Login/>,
+            errorElement: <Login/>,
         },
       ]);
     return router;

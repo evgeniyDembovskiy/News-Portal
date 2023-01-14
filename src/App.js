@@ -1,12 +1,26 @@
-import React from "react";
-import {RouterProvider} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { RouterProvider } from "react-router-dom";
 import "./styles/App.css"
-import { getRoutes } from './router/routes';
+import { getPublicRoutes, getPrivateRoutes } from './router/routes';
+import { AuthContext } from './context/index';
 
 function App() {
-    const router = getRoutes();
+    const [isAuth, setIsAuth] = useState(false);
+    const router = isAuth ? getPrivateRoutes() : getPublicRoutes();
+
+    useEffect(() => {
+        if(localStorage.getItem("auth")) {
+            setIsAuth(true)
+        }
+    }, [])
     return (
-        <RouterProvider router={router}/>
+        <AuthContext.Provider value={{
+            isAuth,
+            setIsAuth
+        }}>
+            <RouterProvider router={router}/>
+        </AuthContext.Provider>
+
     )
 }
 
