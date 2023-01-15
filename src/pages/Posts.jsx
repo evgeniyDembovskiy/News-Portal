@@ -10,10 +10,8 @@ import { usePosts } from "./../hooks/usePosts";
 import PostService from "./../API/PostService";
 import Loader from "./../components/UI/loader/Loader";
 import { useFetching } from "./../hooks/useFetching";
-import { getPageCount, getPagesArray } from "./../utils/pages";
-import Pagination from "./../components/UI/pagination/Pagination";
+import { getPageCount} from "./../utils/pages";
 import Navbar from './../components/UI/navbar/Navbar';
-import { Outlet } from "react-router-dom";
 import { useObserver } from "../hooks/useObserver";
 import MySelect from './../components/UI/select/MySelect';
 
@@ -47,10 +45,6 @@ function Posts() {
         setPosts([...posts, newPost]);
         setModal(false);
     };
-
-    const changePage = (page) => {
-        setPage(page);
-    }
 
     const removePost = (post) => {
         setPosts(posts.filter(p => p.id !== post.id))
